@@ -1,4 +1,6 @@
 #include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
 #include"bstree.h"
 
 #define MAX_shafts 10000
@@ -28,12 +30,25 @@ int main(int argc,char *argv[]){
     int n=0;
     while(tmp=fgetc(p)!=EOF){
         if((tmp>='a' && tmp<='z') || (tmp>='A' && tmp<='Z')){
-            string[n]=tmp;
+            strcpy(string[n],tmp);
             n++;
             continue;
         }
         if(tmp=='>' || tmp=='<'){
-            char tmp2=
+            char tmp2=malloc(sizeof(char));
+            tmp2=fgetc(p);
+            if(tmp2=='='){
+                strcpy(string[n],tmp);
+                n++;
+                strcpy(string[n],tmp2);
+                n++;
+            }else{
+                ungetc(tmp2,p);
+                strcpy(string[n],tmp);
+                n++;
+            }
+            free(tmp2);
+            continue;
         }
     }
 }
