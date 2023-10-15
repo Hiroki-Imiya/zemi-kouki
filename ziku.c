@@ -1,7 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include"bstree.h"
 
 #define MAX_shafts 10000
 #define MAX_STRING 100
@@ -21,33 +20,32 @@ int main(int argc,char *argv[]){
     }
 	FILE *p;
     SHAFT shafts[MAX_shafts];
-    if(fopen(p,argv[1])==NULL){
+    if((p=fopen(argv[1],"r"))==NULL){
         fprintf(stderr,"ファイルのオープンが出来ません\n");
         return 1;
     }
     char tmp;
-    char string[MAX_STRING];
+    char *string=malloc(sizeof(char)*MAX_STRING);
     int n=0;
     while(tmp=fgetc(p)!=EOF){
         if((tmp>='a' && tmp<='z') || (tmp>='A' && tmp<='Z')){
-            strcpy(string[n],tmp);
+            strcpy(&string[n],&tmp);
             n++;
             continue;
         }
         if(tmp=='>' || tmp=='<'){
-            char tmp2=malloc(sizeof(char));
+            char tmp2;
             tmp2=fgetc(p);
             if(tmp2=='='){
-                strcpy(string[n],tmp);
+                strcpy(&string[n],&tmp);
                 n++;
-                strcpy(string[n],tmp2);
+                strcpy(&string[n],&tmp2);
                 n++;
             }else{
                 ungetc(tmp2,p);
-                strcpy(string[n],tmp);
+                strcpy(&string[n],&tmp);
                 n++;
             }
-            free(tmp2);
             continue;
         }
     }
