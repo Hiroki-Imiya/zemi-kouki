@@ -14,6 +14,7 @@ struct ziku{
 typedef struct ziku SHAFT;
 
 int main(int argc,char *argv[]){
+    int node=0;
     if(argc!=2){
         fprintf(stderr,"ファイルを1つのみ指定してください\n");
         return 1;
@@ -27,12 +28,7 @@ int main(int argc,char *argv[]){
     char tmp;
     char *string=malloc(sizeof(char)*MAX_STRING);
     int n=0;
-    while(tmp=fgetc(p)!=EOF){
-        if((tmp>='a' && tmp<='z') || (tmp>='A' && tmp<='Z')){
-            strcpy(&string[n],&tmp);
-            n++;
-            continue;
-        }
+    while((tmp=fgetc(p))!=EOF){
         if(tmp=='>' || tmp=='<'){
             char tmp2;
             tmp2=fgetc(p);
@@ -48,5 +44,28 @@ int main(int argc,char *argv[]){
             }
             continue;
         }
+        if(tmp==' ' || tmp=='(' || tmp=='\"'){
+            string[n]='\0';
+            shafts[node].content=malloc(sizeof(char)*n);
+            strcmp(shafts[node].content,string);
+            printf("%s\n",string);
+            printf("%s\n",shafts[node].content);
+            node++;
+            free(string);
+            string=malloc(sizeof(char)*MAX_STRING);
+            n=0;
+            continue;
+        }
+        if(tmp=='#'){
+            while((tmp=fgetc(p))!='\n'){
+            }
+            continue;
+        }
+        strcpy(&string[n],&tmp);
+        n++;
     }
+    for(int i=0;i<node;i++){
+        printf("%s\n",shafts[i].content);
+    }
+    return 0;
 }
