@@ -29,6 +29,9 @@ int main(int argc,char *argv[]){
     char *string=malloc(sizeof(char)*MAX_STRING);
     int n=0;
     while((tmp=fgetc(p))!=EOF){
+        if(tmp=='\n' || tmp==';'){
+            continue;
+        }
         if(tmp=='>' || tmp=='<'){
             char tmp2;
             tmp2=fgetc(p);
@@ -44,21 +47,60 @@ int main(int argc,char *argv[]){
             }
             continue;
         }
-        if(tmp==' ' || tmp=='(' || tmp=='\"'){
+        if(tmp==' ' || tmp=='(' || tmp==')'){
+            if(n!=0){
+                string[n]='\0';
+                shafts[node].content=malloc(sizeof(char)*n);
+                strcpy(shafts[node].content,string);
+                //printf("%s\n",string);
+                //printf("%s\n",shafts[node].content);
+                node++;
+                free(string);
+                string=malloc(sizeof(char)*MAX_STRING);
+                n=0;
+            }
+            continue;
+        }
+        if(tmp=='#'){
+            while((tmp=fgetc(p))!='\n'){
+            }
+            continue;
+        }
+        if(tmp=='\"'){
+            while((tmp=fgetc(p))!='\"'){
+                strcpy(&string[n],&tmp);
+                n++;
+            }
             string[n]='\0';
             shafts[node].content=malloc(sizeof(char)*n);
-            strcmp(shafts[node].content,string);
-            printf("%s\n",string);
-            printf("%s\n",shafts[node].content);
+            strcpy(shafts[node].content,string);
+            //printf("%s\n",string);
+            //printf("%s\n",shafts[node].content);
             node++;
             free(string);
             string=malloc(sizeof(char)*MAX_STRING);
             n=0;
             continue;
         }
-        if(tmp=='#'){
-            while((tmp=fgetc(p))!='\n'){
+        if(tmp=='+'||tmp=='-'||tmp=='*'||tmp=='/'){
+            if(n!=0){
+                string[n]='\0';
+                shafts[node].content=malloc(sizeof(char)*n);
+                strcpy(shafts[node].content,string);
+                node++;
+                free(string);
+                string=malloc(sizeof(char)*MAX_STRING);
+                n=0;
             }
+            strcpy(&string[n],&tmp);
+            n++;
+            string[n]='\0';
+            shafts[node].content=malloc(sizeof(char)*n);
+            strcpy(shafts[node].content,string);
+            node++;
+            free(string);
+            string=malloc(sizeof(char)*MAX_STRING);
+            n=0;
             continue;
         }
         strcpy(&string[n],&tmp);
