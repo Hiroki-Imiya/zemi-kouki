@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include <ctype.h>
+#include<ctype.h>
 
 #define MAX_shafts 10000
 #define MAX_STRING 100
@@ -14,7 +14,7 @@ struct ziku{
 
 typedef struct ziku SHAFT;
 
-void set_id(SHAFT *shafts,int node){
+void set_id(SHAFT *shafts,int node){        //トークンに対応する番号を挿入
     if(strcmp(shafts[node].content,"+")==0){
         shafts[node].id=12;
         return;
@@ -126,8 +126,129 @@ void set_id(SHAFT *shafts,int node){
     return;
 }
 
+void set_mold(SHAFT *shafts,int node){
+    for(int i=0;i<node;i++){
+        shafts[i].mold=malloc(sizeof(char)*MAX_STRING);
+        switch (shafts[i].id){
+        case 1:
+            strcpy(shafts[i].mold,"TK_IDENTIFIER");
+            break;
+        case 2:
+            strcpy(shafts[i].mold,"TK_VAR");
+            break;
+
+        case 3:
+            strcpy(shafts[i].mold,"TK_READ");
+            break;
+        
+        case 4:
+            strcpy(shafts[i].mold,"TK_PRINT");
+            break;
+
+        case 5:
+            strcpy(shafts[i].mold,"TK_PRINTLN");
+            break;
+        
+        case 6:
+            strcpy(shafts[i].mold,"TK_DIV");
+            break;
+
+        case 7:
+            strcpy(shafts[i].mold,"TK_REPEAT");
+            break;
+
+        case 9:
+            strcpy(shafts[i].mold,"TK_INTEGER");
+            break;
+
+        case 10:
+            strcpy(shafts[i].mold,"TK_REAL_NUMBER");
+            break;
+
+        case 11:
+            strcpy(shafts[i].mold,"TK_STRING");
+            break;
+        
+        case 12:
+            strcpy(shafts[i].mold,"TK_PLUS");
+            break;
+
+        case 13:
+            strcpy(shafts[i].mold,"TK_MINUS");
+            break;
+
+        case 14:
+            strcpy(shafts[i].mold,"TK_ASUTA");
+            break;
+
+        case 15:
+            strcpy(shafts[i].mold,"TK_SURASHU");
+            break;
+
+        case 16:
+            strcpy(shafts[i].mold,"TK_PASENTO");
+            break;
+
+        case 17:
+            strcpy(shafts[i].mold,"TK_L_PAR");
+            break;
+
+        case 18:
+            strcpy(shafts[i].mold,"TK_R_PAR");
+            break;
+
+        case 19:
+            strcpy(shafts[i].mold,"TK_SEMIKORON");
+            break;
+
+        case 20:
+            strcpy(shafts[i].mold,"TK_KANMA");
+            break;
+
+        case 21:
+            strcpy(shafts[i].mold,"TK_ATTOMA-KU");
+            break;
+
+        case 22:
+            strcpy(shafts[i].mold,"TK_EQUAL");
+            break;
+        default:
+            printf("error\n");
+            break;
+        }
+    }
+}
+
+void print_id(SHAFT *shafts,int node){
+    for(int i=0;i<node;i++){
+        printf("%-2d\n",shafts[i].id);
+    }
+}
+
+void print_id_mold(SHAFT *shafts,int node){
+    for(int i=0;i<node;i++){
+        printf("%-2d\t%s\n",shafts[i].id,shafts[i].mold);
+    }
+}
+
+void print_line_id_mold(SHAFT *shafts,int node){
+    for(int i=0;i<node;i++){
+        printf("%-2d\t%-2d\t%s\n",shafts[i].line,shafts[i].id,shafts[i].mold);
+    }
+}
+
+void print_all(SHAFT *shafts,int node){
+    for(int i=0;i<node;i++){
+        if(shafts[i].id==1 || (shafts[i].id>=9 && shafts[i].id<=11)){
+             printf("%-2d\t%-2d\t%s\t%s\n",shafts[i].line,shafts[i].id,shafts[i].mold,shafts[i].content);
+        }
+        printf("%-2d\t%-2d\t%s\n",shafts[i].line,shafts[i].id,shafts[i].mold);
+    }
+}
+
 int main(int argc,char *argv[]){
     int node=0;
+    int lin=1;
     if(argc!=2){
         fprintf(stderr,"ファイルを1つのみ指定してください\n");
         return 1;
@@ -143,7 +264,8 @@ int main(int argc,char *argv[]){
     int n=0;
     while((tmp=fgetc(p))!=EOF){
 
-        if(tmp=='\n'){                      //改行の場合
+        if(tmp=='\n'){  
+            lin++;                    //改行の場合
             continue;
         }
 
@@ -168,6 +290,7 @@ int main(int argc,char *argv[]){
                 string[n]='\0';
                 shafts[node].content=malloc(sizeof(char)*n);
                 strcpy(shafts[node].content,string);
+                shafts[node].line=lin;
                 //printf("%s\n",string);
                 //printf("%s\n",shafts[node].content);
                 node++;
@@ -181,6 +304,7 @@ int main(int argc,char *argv[]){
         if(tmp=='#'){                       //米印の場合
             while((tmp=fgetc(p))!='\n'){
             }
+            lin++;
             continue;
         }
 
@@ -193,6 +317,7 @@ int main(int argc,char *argv[]){
             shafts[node].content=malloc(sizeof(char)*n);
             strcpy(shafts[node].content,string);
             shafts[node].id=11;
+            shafts[node].line=lin;
             //printf("%s\n",string);
             //printf("%s\n",shafts[node].content);
             node++;
@@ -207,6 +332,7 @@ int main(int argc,char *argv[]){
                 string[n]='\0';
                 shafts[node].content=malloc(sizeof(char)*n);
                 strcpy(shafts[node].content,string);
+                shafts[node].line=lin;
                 node++;
                 free(string);
                 string=malloc(sizeof(char)*MAX_STRING);
@@ -227,6 +353,7 @@ int main(int argc,char *argv[]){
             string[n]='\0';
             shafts[node].content=malloc(sizeof(char)*n);
             strcpy(shafts[node].content,string);
+            shafts[node].line=lin;
             node++;
             free(string);
             string=malloc(sizeof(char)*MAX_STRING);
@@ -243,9 +370,27 @@ int main(int argc,char *argv[]){
             set_id(shafts,i);
         }
     }
+    
+    set_mold(shafts,node);
 
-    for(int i=0;i<node;i++){
-        printf("%s,%d\n",shafts[i].content,shafts[i].id);
+    int m;
+    printf("表示の仕方を入力してください:");
+    scanf("%d",&m);
+    switch(m){
+        case 1:
+            print_id(shafts,node);
+            break;
+        case 2:
+            print_id_mold(shafts,node);
+            break;
+        case 3:
+            print_line_id_mold(shafts,node);
+            break;
+        case 4:
+            print_all(shafts,node);
+            break;
+        default:
+            printf("1～4で入力してください\n");
     }
     return 0;
 }
