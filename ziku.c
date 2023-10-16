@@ -15,70 +15,70 @@ struct ziku{
 typedef struct ziku SHAFT;
 
 void set_id(SHAFT *shafts,int node){
-    if(strcmp(shafts[node].content,"+")==1){
+    if(strcmp(shafts[node].content,"+")==0){
         shafts[node].id=12;
         return;
     }
-    if(strcmp(shafts[node].content,"-")==1){
+    if(strcmp(shafts[node].content,"-")==0){
         shafts[node].id=13;
         return;
     }
-    if(strcmp(shafts[node].content,"*")){
+    if(strcmp(shafts[node].content,"*")==0){
         shafts[node].id=14;
         return;
     }
-    if(strcmp(shafts[node].content,"/")){
+    if(strcmp(shafts[node].content,"/")==0){
         shafts[node].id=15;
         return;
     }
-    if(strcmp(shafts[node].content,"%")){
+    if(strcmp(shafts[node].content,"%")==0){
         shafts[node].id=16;
         return;
     }
-    if(strcmp(shafts[node].content,"(")){
+    if(strcmp(shafts[node].content,"(")==0){
         shafts[node].id=17;
         return;
     }
-    if(strcmp(shafts[node].content,")")){
+    if(strcmp(shafts[node].content,")")==0){
         shafts[node].id=18;
         return;
     }
-    if(strcmp(shafts[node].content,";")){
+    if(strcmp(shafts[node].content,";")==0){
         shafts[node].id=19;
         return;
     }
-    if(strcmp(shafts[node].content,",")){
+    if(strcmp(shafts[node].content,",")==0){
         shafts[node].id=20;
         return;
     }
-    if(strcmp(shafts[node].content,"@")){
+    if(strcmp(shafts[node].content,"@")==0){
         shafts[node].id=21;
         return;
     }
-    if(strcmp(shafts[node].content,":=")){
+    if(strcmp(shafts[node].content,":=")==0){
         shafts[node].id=22;
         return;
     }
-    if(strcmp(shafts[node].content,"var")){
+    if(strcmp(shafts[node].content,"var")==0){
         shafts[node].id=2;
         return;
-    }else if(strcmp(shafts[node].content,"read")){
+    }else if(strcmp(shafts[node].content,"read")==0){
         shafts[node].id=3;
         return;
     }
-    if(strcmp(shafts[node].content,"print")){
+    if(strcmp(shafts[node].content,"print")==0){
         shafts[node].id=4;
         return;
     }
-    if(strcmp(shafts[node].content,"println")){
+    if(strcmp(shafts[node].content,"println")==0){
         shafts[node].id=5;
         return;
     }
-    if (strcmp(shafts[node].content,"div")){
+    if (strcmp(shafts[node].content,"div")==0){
         shafts[node].id=6;
         return;
     }
-    if(strcmp(shafts[node].content,"repeat")){
+    if(strcmp(shafts[node].content,"repeat")==0){
         shafts[node].id=7;
         return;
     }
@@ -91,19 +91,19 @@ void set_id(SHAFT *shafts,int node){
             cnt++;
         }
     }
-    if(cnt==len-1){
+    if(cnt==len){
         shafts[node].id=9;
         return;
     }
     for(int i=0;i<len;i++){
         if(shafts[node].content[i]=='.'){
             for(int j=0;j<i;j++){
-                if(!isdigit(shafts[node].content[i])){
+                if(isdigit(shafts[node].content[j])==0){
                     flag=0;
                 }
             }
             for(int l=i+1;l<len;l++){
-                if(!isdigit(shafts[node].content[i])){
+                if(isdigit(shafts[node].content[l])==0){
                     flag=0;
                 }
             }
@@ -124,7 +124,6 @@ void set_id(SHAFT *shafts,int node){
     }
     shafts[node].id=1;
     return;
-
 }
 
 int main(int argc,char *argv[]){
@@ -193,6 +192,7 @@ int main(int argc,char *argv[]){
             string[n]='\0';
             shafts[node].content=malloc(sizeof(char)*n);
             strcpy(shafts[node].content,string);
+            shafts[node].id=11;
             //printf("%s\n",string);
             //printf("%s\n",shafts[node].content);
             node++;
@@ -239,7 +239,9 @@ int main(int argc,char *argv[]){
     }
 
     for(int i=0;i<node;i++){
-        set_id(shafts,i);
+        if(shafts[i].id==0){
+            set_id(shafts,i);
+        }
     }
 
     for(int i=0;i<node;i++){
