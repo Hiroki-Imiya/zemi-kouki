@@ -24,22 +24,32 @@ int main(int argc,char *argv[]){
             continue;
         }
 
-        if(tmp=='>' || tmp=='<'){           //大なりまたは小なりの場合
+        if(tmp=='>' || tmp=='<'){       //大なりまたは小なりの場合
+            create_shaft(shafts,node,string,n,lin);
+            node++;
+            free(string);
+            string=malloc(sizeof(char)*MAX_STRING);
+            n=0;
             char tmp2;
             tmp2=fgetc(p);
             if(tmp2=='='){                  //大なりまたは小なりの次が＝の場合
-                strcpy(&string[n],&tmp);
+                /*strcpy(&string[n],&tmp);
                 n++;
-                strcpy(&string[n],&tmp2);   //そうでない場合
-                n++;
-            }else{
+                strcpy(&string[n],&tmp2);   
+                n++;*/
+            }else{                          //そうでない場合
                 ungetc(tmp2,p);
-                strcpy(&string[n],&tmp);
-                n++;
+                /*strcpy(&string[n],&tmp);
+                n++;*/
             }
+            /*create_shaft(shafts,node,string,n,lin);
+            node++;
+            free(string);
+            string=malloc(sizeof(char)*MAX_STRING);
+            n=0;*/
             continue;
         }
-
+        
         if(tmp==' '){
             if(n!=0){
                 create_shaft(shafts,node,string,n,lin);
