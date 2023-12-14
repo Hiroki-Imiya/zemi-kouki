@@ -10,6 +10,8 @@ int main(int argc,char *argv[]){
     }
 	FILE *p;
     SHAFT shafts[MAX_shafts];
+    FILE *resultFile;
+    resultFile=fopen("result.txt","w");
     if((p=fopen(argv[1],"r"))==NULL){
         fprintf(stderr,"ファイルのオープンが出来ません\n");
         return 1;
@@ -113,6 +115,8 @@ int main(int argc,char *argv[]){
             set_id(shafts,i);
         }
     }
+
+    print_to_file(shafts,node,resultFile);
     
     set_mold(shafts,node);
 
@@ -135,6 +139,7 @@ int main(int argc,char *argv[]){
         default:
             printf("1～4で入力してください\n");
     }
+    fclose(resultFile);
     
     return 0;
 }

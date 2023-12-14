@@ -240,3 +240,9 @@ void print_all(SHAFT *shafts,int node){
         }
     }
 }
+
+void print_to_file(SHAFT *shafts,int node,FILE *resultFile){
+    for(int i=0;i<node;i++){
+        fprintf(resultFile,"%d\n",shafts[i].id);
+    }
+}

@@ -26,3 +26,5 @@ void print_id_mold(SHAFT *shafts,int node);
 void print_line_id_mold(SHAFT *shafts,int node);
 
 void print_all(SHAFT *shafts,int node);
+
+void print_to_file(SHAFT *shafts,int node,FILE *resultFile);
